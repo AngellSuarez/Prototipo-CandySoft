@@ -69,28 +69,6 @@ const Inicio = () => {
     "https://media.istockphoto.com/id/1461739328/es/foto/primer-plano-de-una-manicura-marr%C3%B3n-en-u%C3%B1as-largas-y-afiladas-sobre-un-fondo-de-flores-con-un.jpg?s=612x612&w=0&k=20&c=qXXHT1dzW5LpRltwRa5PqSpzDr-rmuFXO3H38Bsms28=",
   ]
 
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
-          slidesToShow: 1,
-        },
-      },
-    ],
-  }
-
   const itemRefs = useRef({})
 
   useEffect(() => {
@@ -100,20 +78,70 @@ const Inicio = () => {
     }
   }, [subMenuServicio])
 
-  const testimonios = [
-    {
-      nombre: "Laura Mejia.",
-      comentario: "Excelente servicio, súper profesionales y muy amables. ¡Me encantó!",
-    },
-    {
-      nombre: "Andrea González.",
-      comentario: "Los mejores en uñas y decoración, siempre salgo feliz. Súper recomendados.",
-    },
-    {
-      nombre: "Elizabeth Apaza.",
-      comentario: "El spa de tratamientos es una experiencia increíble. Volveré pronto!",
-    },
-  ]
+  const [calificaciones, setCalificaciones] = useState([]);
+
+  useEffect(() => {
+    fetch("https://angelsuarez.pythonanywhere.com/api/calificacion/")
+      .then((res) => res.json())
+      .then((data) => {
+        const ordenadas = data.sort(
+          (a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion)
+        );
+        setCalificaciones(ordenadas.slice(0, 6));
+      })
+      .catch((err) => console.error("Error al cargar calificaciones:", err));
+  }, []);
+
+  const settings = {
+    dots: true,
+    infinite: calificaciones.length > 3, 
+    speed: 600,
+    slidesToShow: Math.min(3, calificaciones.length),
+    slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: Math.min(2, calificaciones.length),
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 900,
+        settings: {
+          slidesToShow: Math.min(2, calificaciones.length),
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  const mapPuntuacionToStars = {
+    1: 5,
+    2: 4,
+    3: 2,
+    4: 1,
+  };
+
+  const renderStars = (puntuacion) => {
+    const estrellas = mapPuntuacionToStars[puntuacion] || 0;
+    return (
+      <div className="estrellas">
+        {Array.from({ length: 5 }, (_, i) => (
+          <span key={i} className={i < estrellas ? "star filled" : "star"}>
+            {i < estrellas ? "★" : "☆"}
+          </span>
+        ))}
+      </div>
+    );
+  };
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("es-CO", {
@@ -331,10 +359,22 @@ const Inicio = () => {
         <h2 className="titulo-carousel">Lo que dicen nuestras clientas</h2>
         <div className="espacio">
           <Slider {...settings}>
-            {testimonios.map((item, index) => (
-              <div key={index} className="comentario">
-                <p className="texto">"{item.comentario}"</p>
-                <p className="nombre">- {item.nombre}</p>
+            {calificaciones.map((item) => (
+              <div key={item.id} className="comentario">
+                {item.imagen && (
+                  <img
+                    src={item.imagen}
+                    alt="Foto cliente"
+                    className="imagen-cliente"
+                  />
+                )}
+                <div className="puntuaciones">
+                  <p className="texto">{item.comentario}</p>
+                  {renderStars(item.puntuacion)}
+                  <p className="fecha">
+                    {new Date(item.fecha_creacion).toLocaleDateString()}
+                  </p>
+                </div>
               </div>
             ))}
           </Slider>

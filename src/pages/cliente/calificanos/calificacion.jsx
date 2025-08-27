@@ -15,10 +15,10 @@ const Calificacion = () => {
   const cameraInputRef = useRef(null)
 
   const icons = [
-    { id: 2, emoji: "😊", label: "Muy Bien", color: "#3b82f6" },
-    { id: 3, emoji: "🙂", label: "Bien", color: "#f59e0b" },
-    { id: 4, emoji: "😞", label: "Malo", color: "#f97316" },
-    { id: 5, emoji: "😡", label: "Muy Malo", color: "#ef4444" },
+    { id: 1, emoji: "😊", label: "Muy Bien", color: "#3b82f6" },
+    { id: 2, emoji: "🙂", label: "Bien", color: "#f59e0b" },
+    { id: 3, emoji: "😞", label: "Malo", color: "#f97316" },
+    { id: 4, emoji: "😡", label: "Muy Malo", color: "#ef4444" },
   ]
 
   const handleSubmit = async () => {
