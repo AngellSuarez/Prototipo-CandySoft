@@ -27,37 +27,6 @@ const GestionCitasMan = () => {
     const [fechaActual, setFechaActual] = useState(new Date())
     const { darkMode } = useTheme()
 
-    const [notificaciones, setNotificaciones] = useState([
-        {
-            id: 1,
-            mensaje: "Nueva novedad creada por Paula. Cambio en el horario de ingreso",
-            fecha: "2024-12-29",
-            visto: false,
-        },
-        {
-            id: 2,
-            mensaje: "Se ha agendado una cita para el 03/05/2025.",
-            fecha: "2024-12-28",
-            visto: false,
-        },
-    ])
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [tabActiva, setTabActiva] = useState("notificaciones")
-
-    const openModal = (tab = "notificaciones") => {
-        setTabActiva(tab)
-        setIsModalOpen(true)
-    }
-
-    const closeModal = () => {
-        setIsModalOpen(false)
-        if (tabActiva === "notificaciones") {
-            setNotificaciones((prev) => prev.map((n) => ({ ...n, visto: true })))
-        }
-    }
-
-    const notificacionesNoVistas = notificaciones.filter((n) => !n.visto).length
-
     const fetchCitas = async () => {
         try {
             setLoading(true)
@@ -381,15 +350,7 @@ const GestionCitasMan = () => {
             <div className="fila-formulario">
                 <h1 className="titulo">Gestión de citas</h1>
 
-                <div className="iconos-perfil">
-                    <div className="bell-container" onClick={() => openModal("notificaciones")}>
-                        <span title="Ver tus notificaciones">
-                            <Bell className="icon" />
-                        </span>
-                        {notificacionesNoVistas > 0 && (
-                            <span className="notification-badge">{notificacionesNoVistas > 99 ? "99+" : notificacionesNoVistas}</span>
-                        )}
-                    </div>
+                <div style={{ marginLeft: 670}} className="iconos-perfil">
                     <Link to="/manicurista/dashboard/perfil">
                         <span title="Tu perfil">
                             <User className="icon" />
@@ -550,72 +511,6 @@ const GestionCitasMan = () => {
                                     </button>
                                 </div>
                             </form>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {isModalOpen && (
-                <div className="overlay-popup-notifications" onClick={closeModal}>
-                    <div className="ventana-popup-notifications" onClick={(e) => e.stopPropagation()}>
-                        <div className="contenido-popup-notifications">
-                            <div className="notifications-header">
-                                <h1 className="notifications-title">Centro de Notificaciones</h1>
-                                <button onClick={closeModal} className="close-button">
-                                    <X className="w-6 h-6" />
-                                </button>
-                            </div>
-
-                            <div className="tabs-container">
-                                <button
-                                    className={`tab-button ${tabActiva === "notificaciones" ? "tab-active" : "tab-inactive"}`}
-                                    onClick={() => setTabActiva("notificaciones")}
-                                >
-                                    <div className="tab-content">
-                                        <Bell className="w-4 h-4" />
-                                        Notificaciones
-                                        {notificacionesNoVistas > 0 && <span className="tab-badge">{notificacionesNoVistas}</span>}
-                                    </div>
-                                </button>
-                            </div>
-
-                            {/* Contenido de las pestañas mejorado */}
-                            <div className="tab-content-container">
-                                {tabActiva === "notificaciones" && (
-                                    <div className="tab-panel">
-                                        <h2 className="section-title">Notificaciones Recientes</h2>
-                                        {notificaciones.length === 0 ? (
-                                            <div className="empty-state">
-                                                <Bell className="empty-icon" />
-                                                <p>No tienes notificaciones nuevas.</p>
-                                            </div>
-                                        ) : (
-                                            <ul className="notifications-list">
-                                                {notificaciones.map((n) => (
-                                                    <li
-                                                        key={n.id}
-                                                        className={`notification-item ${!n.visto ? "notification-unread" : "notification-read"}`}
-                                                    >
-                                                        <div className="notification-content">
-                                                            <div className="notification-text">
-                                                                <p className="notification-message">{n.mensaje}</p>
-                                                                <p className="notification-date">{n.fecha}</p>
-                                                            </div>
-                                                            {!n.visto && <span className="notification-dot"></span>}
-                                                        </div>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-
-                            <div className="modal-footer">
-                                <button className="close-modal-button" onClick={closeModal}>
-                                    Cerrar
-                                </button>
-                            </div>
                         </div>
                     </div>
                 </div>

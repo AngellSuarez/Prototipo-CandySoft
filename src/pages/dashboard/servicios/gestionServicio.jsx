@@ -142,7 +142,7 @@ const GestionServicio = () => {
             let error = "";
 
             if (name === "precio") {
-                if (!/^\d*\.?\d{0,2}$/.test(value)) {
+                if (!/^[\d$.]+$/.test(value)) {
                     error = "El precio debe contener solo números";
                 }
             }
@@ -331,7 +331,7 @@ const GestionServicio = () => {
 
         if (result.isConfirmed) {
             try {
-                const {status,data} = await eliminar_servicio(servicio.id);
+                const { status, data } = await eliminar_servicio(servicio.id);
 
                 if (status === 200) {
                     await MySwal.fire({
@@ -656,7 +656,7 @@ const GestionServicio = () => {
                             serviciosActuales.map((servicio) => (
                                 <tr key={servicio.id}>
                                     <td>{servicio.nombre}</td>
-                                    <td>${servicio.precio}</td>
+                                    <td>$ {parseFloat(servicio.precio).toLocaleString()}</td>
                                     <td>
                                         <button
                                             onClick={() => handleToggleEstado(servicio.id)}
@@ -1015,15 +1015,20 @@ const GestionServicio = () => {
                                         <input
                                             name="precio"
                                             placeholder="Precio *"
-                                            value={nuevoServicio.precio}
+                                            value={
+                                                nuevoServicio.precio
+                                                    ? `$${Number(nuevoServicio.precio).toLocaleString("es-CO")}`
+                                                    : ""
+                                            }
                                             readOnly={modoVer}
                                             className="input-texto"
                                             onChange={(e) => {
-                                                const value = e.target.value;
-                                                if (/^\d*$/.test(value)) {
-                                                    if (Number(value) <= 1000000) {
-                                                        handleInputChange(e);
-                                                    }
+                                                const numericValue = e.target.value.replace(/\D/g, "");
+                                                if (numericValue === "" || Number(numericValue) <= 1000000) {
+                                                    setNuevoServicio({
+                                                        ...nuevoServicio,
+                                                        precio: numericValue, 
+                                                    });
                                                 }
                                             }}
                                             onBlur={handleBlur}
@@ -1031,11 +1036,13 @@ const GestionServicio = () => {
                                         {!modoVer && errores.precio && (
                                             <p className="error-texto">{errores.precio}</p>
                                         )}
-                                        {!modoVer && /^\d+$/.test(nuevoServicio.precio) && Number(nuevoServicio.precio) === 1000000 && (
-                                            <p className="error-texto absolute left-0 top-1/2 -translate-y-1/2 text-left text-red-600">
-                                                Has alcanzado el valor máximo permitido (1,000,000).
-                                            </p>
-                                        )}
+                                        {!modoVer &&
+                                            /^\d+$/.test(nuevoServicio.precio) &&
+                                            Number(nuevoServicio.precio) === 1000000 && (
+                                                <p className="error-texto absolute left-0 top-1/2 -translate-y-1/2 text-left text-red-600">
+                                                    Has alcanzado el valor máximo permitido (1,000,000).
+                                                </p>
+                                            )}
                                     </div>
 
                                     <div className="campo">

@@ -613,7 +613,7 @@ const GestionProveedoresRec = () => {
             <div className="fila-formulario">
                 <h1 className="titulo">Gestión de proveedores</h1>
 
-                <div className="iconos-perfil">
+                <div className="iconos-perfil-2">
                     <div className="bell-container" onClick={() => openModal("calificaciones")}>
                         <span title="Ver calificaciones">
                             <Star className="icon" />

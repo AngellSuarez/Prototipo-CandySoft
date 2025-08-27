@@ -220,7 +220,7 @@ const Servicios = () => {
 
             <div className="servicios-section">
                 <div className="servicios-container-acceso">
-                    {servicios.slice(0, 6).map((servicio) => (
+                    {servicios.slice(0, 35).map((servicio) => (
                         <Link key={servicio.id} to={`/cliente/servicios/${servicio.id}`}>
                             <div className="servicio-tarjeta">
                                 <h3 className="servicio-nombre">{servicio.nombre}</h3>
@@ -256,12 +256,9 @@ const Servicios = () => {
                 <div className="footer-col">
                     <h3>NUESTROS SERVICIOS</h3>
                     <ul>
-                        <li>♥ Manicure tradicional.</li>
-                        <li>♥ Semipermanente.</li>
-                        <li>♥ Extensión de uñas acrílicas.</li>
-                        <li>♥ Decoración a mano alzada.</li>
-                        <li>♥ Pedicure.</li>
-                        <li>♥ Spa de tratamientos.</li>
+                        {servicios.slice(0, 6).map((servicio) => (
+                            <li key={servicio.id}>♥ {servicio.nombre}</li>
+                        ))}
                     </ul>
                 </div>
 

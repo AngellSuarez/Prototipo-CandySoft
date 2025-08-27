@@ -290,7 +290,7 @@ const Inicio = () => {
       <div className="servicios-section">
         <h2 className="titulo-carousel">Nuestros servicios</h2>
         <div className="servicios-container-acceso">
-          {servicios.slice(0, 6).map((servicio) => (
+          {servicios.slice(0, 10).map((servicio) => (
             <Link key={servicio.id} to={`/servicios/detalles/inicio/${servicio.id}`}>
               <div className="servicio-tarjeta">
                 <h3 className="servicio-nombre">{servicio.nombre}</h3>
@@ -308,7 +308,7 @@ const Inicio = () => {
         <div className="button-container">
           <Link to="/servicios/inicio">
             <button type="button" className="btn-crear">
-              Todos los servicios
+              Ver más...
             </button>
           </Link>
           <button

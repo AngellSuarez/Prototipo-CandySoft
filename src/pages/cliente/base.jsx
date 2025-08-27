@@ -306,7 +306,7 @@ const InicioCliente = () => {
             <div className="servicios-section">
                 <h2 className='titulo-carousel'>Nuestros servicios</h2>
                 <div className="servicios-container-acceso">
-                    {servicios.slice(0, 6).map((servicio) => (
+                    {servicios.slice(0, 10).map((servicio) => (
                         <Link key={servicio.id} to={`/cliente/servicios/${servicio.id}`}>
                             <div className="servicio-tarjeta">
                                 <h3 className="servicio-nombre">{servicio.nombre}</h3>
@@ -324,7 +324,7 @@ const InicioCliente = () => {
                 <div className="button-container">
                     <Link to='/cliente/servicios'>
                         <button type='button' className='btn-crear'>
-                            Todos los servicios
+                            Ver más...
                         </button>
                     </Link>
                     <Link to='/cliente/citas/crear'>
@@ -361,12 +361,9 @@ const InicioCliente = () => {
                 <div className="footer-col">
                     <h3>NUESTROS SERVICIOS</h3>
                     <ul>
-                        <li>♥ Manicure tradicional.</li>
-                        <li>♥ Semipermanente.</li>
-                        <li>♥ Extensión de uñas acrílicas.</li>
-                        <li>♥ Decoración a mano alzada.</li>
-                        <li>♥ Pedicure.</li>
-                        <li>♥ Spa de tratamientos.</li>
+                        {servicios.slice(0, 6).map((servicio) => (
+                            <li key={servicio.id}>♥ {servicio.nombre}</li>
+                        ))}
                     </ul>
                 </div>
 

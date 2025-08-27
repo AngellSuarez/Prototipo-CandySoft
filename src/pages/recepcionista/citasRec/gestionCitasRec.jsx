@@ -1334,7 +1334,7 @@ const GestionCitasRec = () => {
             <div className="fila-formulario">
                 <h1 className="titulo">Gestión de citas</h1>
 
-                <div className="iconos-perfil">
+                <div style={{ marginLeft: 650 }} className="iconos-perfil">
                     <div className="bell-container" onClick={() => openModal("calificaciones")}>
                         <span title="Ver calificaciones">
                             <Star className="icon" />

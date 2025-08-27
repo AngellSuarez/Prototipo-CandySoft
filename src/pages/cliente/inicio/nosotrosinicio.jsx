@@ -222,12 +222,9 @@ const NosotrosInicio = () => {
                 <div className="footer-col">
                     <h3>NUESTROS SERVICIOS</h3>
                     <ul>
-                        <li>♥ Manicure tradicional.</li>
-                        <li>♥ Semipermanente.</li>
-                        <li>♥ Extensión de uñas acrílicas.</li>
-                        <li>♥ Decoración a mano alzada.</li>
-                        <li>♥ Pedicure.</li>
-                        <li>♥ Spa de tratamientos.</li>
+                        {servicios.slice(0, 6).map((servicio) => (
+                            <li key={servicio.id}>♥ {servicio.nombre}</li>
+                        ))}
                     </ul>
                 </div>
 

@@ -478,8 +478,10 @@ const Medicion = () => {
               <XAxis dataKey="name" tick={{ fill: "#888" }} />
               <YAxis domain={[0, 'dataMax + 1']} />
               <Tooltip />
-              <Bar dataKey="Pendiente" stackId="a" fill="#ffb74d" radius={[8, 8, 0, 0]} />
-              <Bar dataKey="Terminada" stackId="a" fill="#4db6ac" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="En proceso" stackId="a" fill="#f7703b" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="Pendiente" stackId="a" fill="#ffe066" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="Terminada" stackId="a" fill="#10b981" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="Cancelada" stackId="a" fill="#ca2b2b" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

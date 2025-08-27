@@ -735,7 +735,14 @@ label {
 }
 
 .iconos-perfil {
-    margin-left: 49%;
+    margin-left: 59%;
+    margin-top: 10px;
+    display: flex;
+    gap: 2rem;
+}
+
+.iconos-perfil-2 {
+    margin-left: 53%;
     margin-top: 10px;
     display: flex;
     gap: 2rem;

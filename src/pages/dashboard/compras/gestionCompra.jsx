@@ -789,7 +789,7 @@ const GestionCompras = () => {
                                     <tr key={compra.id}>
                                         <td>{obtenerNombreProveedor(proveedores.find(p => p.id === compra.proveedor_id))}</td>
                                         <td>{compra.fechaCompra}</td>
-                                        <td>${parseFloat(compra.total).toLocaleString()}</td>
+                                        <td>$ {parseFloat(compra.total).toLocaleString()}</td>
                                         <td>
                                             <span
                                                 className={`estado-texto ${compra.estado_nombre === 'Pendiente'

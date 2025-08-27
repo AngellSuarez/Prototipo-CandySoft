@@ -829,7 +829,7 @@ const GestionNovedades = () => {
     <div className={`roles-container ${darkMode ? "dark" : ""}`}>
       <div className="fila-formulario">
         <h1 className="titulo">Gestión de novedades</h1>
-        <div className="iconos-perfil">
+        <div className="iconos-perfil-2">
           <div className="bell-container" onClick={() => openModal("calificaciones")}>
             <span title="Ver calificaciones">
               <Star className="icon" />
