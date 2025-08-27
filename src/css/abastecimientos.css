@@ -1,0 +1,100 @@
+.input-fecha-placeholder-abastecimiento,
+.input-fecha-activo-abastecimiento {
+    width: 100%; 
+    max-width: 550px; 
+    height: 53px;
+    border: 2px solid #f8c1d9 !important;
+    border-radius: 13px;
+    padding-left: 10px;
+    color: black;
+    outline: none;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    justify-content: flex-start;
+}
+
+.sidebar.closed ~ .main-container .input-fecha-placeholder-abastecimiento,
+.sidebar.closed ~ .main-container .input-fecha-activo-abastecimiento {
+    width: 480px; 
+}
+
+
+.input-fecha-activo::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    cursor: pointer;
+    filter: invert(60%) sepia(100%) saturate(400%) hue-rotate(290deg);
+
+}
+
+.resultado-lista {
+    margin-top: 60px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 10;
+    list-style: none;
+    z-index: 10;
+    position: absolute;
+    width: 28.1%;
+}
+
+.cosas-textarea {
+  width: 87% !important;       
+  max-width: 500px;
+  min-height: 70px;
+  resize: none;                
+  overflow: hidden; 
+  border: 2px solid #f8c1d9;            
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.resultado-item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.resultado-item:hover {
+    background-color: #f0f0f0;
+}
+.insumo-card-abastecimiento {
+    background-color: #fff0f6;
+    border: 1px solid #f8bbd0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(233, 30, 99, 0.1);
+    transition: transform 0.2s;
+    width: 215px;
+}
+
+.insumo-card-abastecimiento:hover {
+    transform: translateY(-5px);
+}
+
+.dark-mode .insumo-card-abastecimiento {
+    background-color: #f0e8e8;
+}
+
+.label-abastecimiento {
+    font-size: 12px;
+    color: #8f2d4e;
+    margin-bottom: 6.5px;
+    font-family: 'Pacifico';
+}
+
+.dark-mode .label-abastecimiento {
+    font-size: 12px;
+    color: #e28daa;
+    margin-bottom: 6.5px;
+    font-family: 'Pacifico';
+}

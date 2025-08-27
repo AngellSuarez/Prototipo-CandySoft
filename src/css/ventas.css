@@ -1,0 +1,350 @@
+.input-fecha-placeholder-venta,
+.input-fecha-activo-venta {
+    min-width: 330px;
+    width: 100%;
+    max-width: 280px;
+    height: 53px;
+    border: 2px solid #f8c1d9 !important;
+    background-color: #fff;
+    border-radius: 13px;
+    padding-left: 10px;
+    color: black;
+    outline: none;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.sidebar.closed~.main-container .input-fecha-placeholder-venta,
+.sidebar.closed~.main-container .input-fecha-activo-venta {
+    width: 280px;
+}
+
+.input-fecha-activo-venta::-webkit-calendar-picker-indicator {
+    opacity: 1;
+    cursor: pointer;
+    filter: invert(60%) sepia(100%) saturate(400%) hue-rotate(290deg);
+
+}
+
+.servicios-agregados-modal {
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.servicio-item-modal {
+    background-color: #fff;
+    border: 1px solid #eee;
+    padding: 8px;
+    margin-bottom: 8px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.modal-fondo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-contenido {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 700px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-contenido h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-form-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.modal-input {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.modal-botones {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-agregar {
+    display: block;
+    margin: 0 auto;
+    background-color: #ecc3d5;
+}
+
+
+.btn-agregar-servicio {
+    display: block;
+    margin: 0 auto;
+    background-color: #ecc3d5;
+}
+
+.btn-agregar-servicio:hover {
+    border: 2px solid #f8c1d9;
+}
+
+.btn-buscar-fecha {
+    background-color: #ecc3d5;
+}
+
+.btn-buscar-fecha:hover {
+    border: 2px solid #f8c1d9;
+}
+
+.grid-insumos-modal-cita {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 1rem;
+}
+
+.campo-buscar {
+    margin-top: 2px;
+    margin-left: 16px;
+}
+
+.titulo-seccion {
+    color: #7e2952;
+    padding: 6px;
+    margin-top: 6px;
+    text-align: center;
+}
+
+.mensaje-vacio {
+    text-align: center;
+}
+
+.lista-servicios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.servicio-card {
+    background-color: #fff0f6;
+    border: 1px solid #f8bbd0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(233, 30, 99, 0.1);
+    transition: transform 0.2s;
+}
+
+.servicio-card:hover {
+    transform: translateY(-3px);
+}
+
+.info-servicio {
+    display: flex;
+    flex-direction: column;
+}
+
+.nombre-servicio {
+    font-weight: 600;
+    color: #7e2952;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.detalle-servicio {
+    font-size: 14px;
+    color: #555;
+}
+
+.btn-eliminar-servicio,
+.btn-editar-servicio {
+    background-color: #bb1616;
+    color: #fff;
+    border: none;
+    border-radius: 20%;
+    width: 16px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+}
+
+.btn-eliminar-servicio:hover {
+    background-color: #921414;
+}
+
+.servicio-item-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px; 
+}
+
+.btn-eliminar-servicio-agregar,
+.btn-editar-servicio-agregar {
+    background-color: #bb1616; 
+    color: #fff;
+    border: none;
+    border-radius: 20%;
+    width: 21px;
+    height: 21px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.3s;
+    margin-top: -20px;
+}
+
+.btn-eliminar-servicio-agregar {
+    background-color: #bb1616;
+}
+
+.btn-eliminar-servicio-agregar:hover {
+    background-color: #921414;
+}
+
+.btn-editar-servicio-agregar,
+.btn-editar-servicio {
+    background-color: #166bbb;
+}
+
+.btn-editar-servicio-agregar:hover,
+.btn-editar-servicio:hover {
+    background-color: #14589a;
+}
+
+
+.btn-buscar-ID {
+    padding: 5px 10px;
+    font-size: 12px;
+    background-color: #f8c1d9;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-buscar-ID:hover {
+    background-color: #f8c1d9;
+}
+
+
+/*ver */
+
+.logo-ver-venta {
+    width: 120px;
+    height: 120px;
+}
+
+.linea {
+    border: none;
+    height: 1px;
+    background-color: #000;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.fecha {
+    float: right;
+    font-size: 14px;
+    margin-top: -20px;
+    color: rgb(24, 24, 24);
+}
+
+.informacion-cliente {
+    margin-top: 6px;
+    font-size: 14px;
+    color: rgb(20, 20, 20);
+}
+
+.servicio-factura {
+    width: 100%;
+    max-width: 900px;
+    margin: 20px auto;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+}
+
+.servicio-factura h4 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #7e2952;
+    text-align: center;
+}
+
+.header-factura,
+.fila-factura {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.header-factura {
+    background-color: #ffe4ec;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #7e2952;
+}
+
+.fila-factura {
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.fila-factura:hover {
+    background-color: #fff0f5;
+}
+
+.col-servicio {
+    width: 120px;
+    font-weight: 500;
+}
+
+.fila-factura p,
+.header-factura p {
+    flex: 1;
+    text-align: center;
+}
+
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}

@@ -1,0 +1,73 @@
+.servicio-detalle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.servicio-detalle-img img {
+    width: 500px;   
+    height: 400px;  
+    object-fit: cover; 
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+
+.servicio-detalle-info {
+    max-width: 600px;
+    text-align: center;
+}
+
+.servicio-detalle-info h1 {
+    font-size: 2.5rem;
+    color: #7e2952;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.servicio-descripcion {
+    margin-top: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 17px;
+    color:rgb(20, 20, 20);
+}
+
+.servicio-tipo-detalle {
+    color: #7e2952;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 17px;
+    margin-top: 15px;
+    font-weight: 700;
+}
+
+.Reserva {
+    background-color: #7e2952;
+    color: #fff;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.Reserva:hover {
+    background-color: #7a2c52;
+}
+
+/* Responsive */
+
+@media (min-width: 768px) {
+    .servicio-detalle {
+        flex-direction: row;
+        justify-content: center;
+        text-align: left;
+    }
+
+    .servicio-detalle-info {
+        padding-left: 2rem;
+    }
+}
