@@ -1893,15 +1893,28 @@ const GestionVentasRec = () => {
                                                         <input
                                                             type="text"
                                                             className="input-texto modal-input"
-                                                            value={precioUnitario}
+                                                            value={
+                                                                precioUnitario
+                                                                    ? new Intl.NumberFormat("es-CO", {
+                                                                        style: "currency",
+                                                                        currency: "COP",
+                                                                        minimumFractionDigits: 0, 
+                                                                    }).format(precioUnitario)
+                                                                    : ""
+                                                            }
                                                             onChange={(e) => {
-                                                                const nuevoPrecio = Number(e.target.value)
-                                                                setPrecioUnitario(nuevoPrecio)
+                                                                const valorLimpio = e.target.value.replace(/[^0-9]/g, "");
+                                                                const nuevoPrecio = Number(valorLimpio);
+
+                                                                setPrecioUnitario(nuevoPrecio);
 
                                                                 if (nuevoPrecio > 0) {
-                                                                    setModalErrores((prev) => ({ ...prev, precio: "" }))
+                                                                    setModalErrores((prev) => ({ ...prev, precio: "" }));
                                                                 } else {
-                                                                    setModalErrores((prev) => ({ ...prev, precio: "El precio no puede ser 0" }))
+                                                                    setModalErrores((prev) => ({
+                                                                        ...prev,
+                                                                        precio: "El precio no puede ser 0",
+                                                                    }));
                                                                 }
                                                             }}
                                                             placeholder="Precio Unitario"
@@ -2525,7 +2538,7 @@ const GestionVentasRec = () => {
 
                             {/* Contenido de las pestañas mejorado */}
                             <div className="tab-content-container">
-                        
+
                                 {tabActiva === "calificaciones" && (
                                     <div className="tab-panel">
                                         <h2 className="section-title">Calificaciones Recibidas</h2>

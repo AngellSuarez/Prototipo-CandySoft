@@ -1728,20 +1728,30 @@ const GestionCitas = () => {
                                         <div className="campo">
                                             <label className="subtitulo-editar-todos">Precio unitario:</label>
                                             <input
-                                                type="number"
+                                                type="text"
                                                 className="input-texto modal-input"
-                                                value={precioUnitario}
-                                                min={0}
+                                                value={
+                                                    precioUnitario
+                                                        ? new Intl.NumberFormat("es-CO", {
+                                                            style: "currency",
+                                                            currency: "COP",
+                                                            minimumFractionDigits: 0,
+                                                        }).format(precioUnitario)
+                                                        : ""
+                                                }
                                                 onChange={(e) => {
-                                                    const nuevoPrecio = Number(e.target.value)
-                                                    setPrecioUnitario(nuevoPrecio)
+                                                    const valorLimpio = e.target.value.replace(/[^0-9]/g, "");
+                                                    const nuevoPrecio = Number(valorLimpio);
+
+                                                    setPrecioUnitario(nuevoPrecio);
                                                     setModalErrores((prev) => ({
                                                         ...prev,
                                                         precio: nuevoPrecio > 0 ? "" : "El precio no puede ser 0",
-                                                    }))
+                                                    }));
                                                 }}
                                                 placeholder="Precio Unitario"
                                             />
+
                                             {modalErrores.precio && <p className="error-texto">{modalErrores.precio}</p>}
                                         </div>
                                     </div>
@@ -2280,17 +2290,26 @@ const GestionCitas = () => {
                                         <div className="campo">
                                             <label className="subtitulo-editar-todos">Precio unitario:</label>
                                             <input
-                                                type="number"
+                                                type="text"
                                                 className="input-texto modal-input"
-                                                value={precioUnitario}
-                                                min={0}
+                                                value={
+                                                    precioUnitario
+                                                        ? new Intl.NumberFormat("es-CO", {
+                                                            style: "currency",
+                                                            currency: "COP",
+                                                            minimumFractionDigits: 0,
+                                                        }).format(precioUnitario)
+                                                        : ""
+                                                }
                                                 onChange={(e) => {
-                                                    const nuevoPrecio = Number(e.target.value)
-                                                    setPrecioUnitario(nuevoPrecio)
+                                                    const valorLimpio = e.target.value.replace(/[^0-9]/g, "");
+                                                    const nuevoPrecio = Number(valorLimpio);
+
+                                                    setPrecioUnitario(nuevoPrecio);
                                                     setModalErrores((prev) => ({
                                                         ...prev,
                                                         precio: nuevoPrecio > 0 ? "" : "El precio no puede ser 0",
-                                                    }))
+                                                    }));
                                                 }}
                                                 placeholder="Precio Unitario"
                                             />
@@ -2444,7 +2463,7 @@ const GestionCitas = () => {
 
                             {/* Contenido de las pestañas mejorado */}
                             <div className="tab-content-container">
-                                
+
                                 {tabActiva === "calificaciones" && (
                                     <div className="tab-panel">
                                         <h2 className="section-title">Calificaciones Recibidas</h2>

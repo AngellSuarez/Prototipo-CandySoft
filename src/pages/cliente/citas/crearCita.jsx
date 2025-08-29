@@ -1,10 +1,16 @@
 import { useState, useEffect } from "react"
-import DatePicker from "react-datepicker"
+import "../../../css/citas.css"
+import { useNavigate } from "react-router-dom"
 import Swal from "sweetalert2"
+import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import "../../../css/crearcita.css"
+import { useSearchParams } from "react-router-dom"
 
 const CrearCita = () => {
+  const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const servicioIdFromUrl = searchParams.get("servicio")
   const [categoriaActiva, setCategoriaActiva] = useState(null)
   const [serviciosSeleccionados, setServiciosSeleccionados] = useState([])
   const [paso, setPaso] = useState(1)
@@ -23,62 +29,49 @@ const CrearCita = () => {
   useEffect(() => {
     const fetchServicios = async () => {
       try {
+        setLoading(true)
         const response = await fetch("https://angelsuarez.pythonanywhere.com/api/servicio/servicio/")
         if (response.ok) {
           const data = await response.json()
           const serviciosActivos = data.filter((servicio) => servicio.estado === "Activo")
+
           const grouped = serviciosActivos.reduce((acc, servicio) => {
             if (!acc[servicio.tipo]) {
               acc[servicio.tipo] = []
             }
-            acc[servicio.tipo].push({
-              id: servicio.id,
-              nombre: servicio.nombre,
-              precio: Number.parseFloat(servicio.precio),
-              duracion: servicio.duracion,
-              descripcion: servicio.descripcion,
-            })
+            acc[servicio.tipo].push(servicio)
             return acc
           }, {})
+
           setServicios(grouped)
-        } else {
-          console.error("Error fetching servicios:", response.statusText)
-          Swal.fire({
-            title: "😔 Oops, algo salió mal",
-            html: `
-              <div style="text-align: center; padding: 20px;">
-                <div style="font-size: 60px; margin-bottom: 15px;">🔄</div>
-                <p style="font-size: 16px; color: #666; margin-bottom: 10px;">
-                  No pudimos cargar nuestros servicios en este momento
-                </p>
-                <p style="font-size: 14px; color: #7e2952; font-weight: bold;">
-                  Por favor, recarga la página o intenta más tarde
-                </p>
-              </div>
-            `,
-            icon: "error",
-            confirmButtonText: "Recargar página",
-            confirmButtonColor: "#7e2952",
-            background: "#fff0f6",
-            customClass: {
-              popup: "swal-cliente-popup",
-              title: "swal-cliente-title",
-              confirmButton: "swal-cliente-button",
-            },
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.reload()
+
+          if (servicioIdFromUrl) {
+            const servicioToSelect = serviciosActivos.find((s) => s.id.toString() === servicioIdFromUrl)
+            if (servicioToSelect) {
+              setServiciosSeleccionados([servicioToSelect])
+              const categoriaIndex = Object.keys(grouped).findIndex((categoria) =>
+                grouped[categoria].some((s) => s.id.toString() === servicioIdFromUrl),
+              )
+              if (categoriaIndex !== -1) {
+                setCategoriaActiva(categoriaIndex)
+              }
             }
-          })
+          }
+        } else {
+          const errorMsg = `Error al cargar los servicios: ${response.statusText}`
+          console.error(errorMsg)
+          Swal.fire("Error", errorMsg, "error")
         }
       } catch (error) {
         console.error("Error fetching servicios:", error)
-        Swal.fire("Error", "No se pudieron cargar los servicios", "error")
+        Swal.fire("Error", "Error al cargar los servicios", "error")
+      } finally {
+        setLoading(false)
       }
     }
 
     fetchServicios()
-  }, [])
+  }, [servicioIdFromUrl])
 
   useEffect(() => {
     const fetchManicuristas = async () => {
@@ -305,7 +298,10 @@ const CrearCita = () => {
     )
   }
 
-  const total = serviciosSeleccionados.reduce((acc, item) => acc + item.precio, 0)
+  const total = serviciosSeleccionados.reduce((acc, item) => {
+    const precio = typeof item.precio === "string" ? Number.parseFloat(item.precio) || 0 : item.precio || 0
+    return acc + precio
+  }, 0)
 
   const formatDuration = (duration) => {
     const [hours, minutes] = duration.split(":")
@@ -672,7 +668,7 @@ const CrearCita = () => {
             html: `
               <div style="text-align: center; padding: 20px;">
                 <div style="font-size: 60px; margin-bottom: 15px;">📋</div>
-                <p style="font-size: 16px; color: #666; margin-bottom: 10px;">
+                <p style="font-size: 16px; color: #666; margin-bottom: 15px;">
                   ${errorMessage}
                 </p>
                 <p style="font-size: 14px; color: #7e2952; font-weight: bold;">
@@ -706,10 +702,12 @@ const CrearCita = () => {
       }
 
       const servicioPromises = serviciosSeleccionados.map(async (servicio) => {
+        const precio =
+          typeof servicio.precio === "string" ? Number.parseFloat(servicio.precio) || 0 : servicio.precio || 0
         const servicioData = {
           cita_id: appointmentId,
           servicio_id: servicio.id,
-          subtotal: servicio.precio.toString(),
+          subtotal: precio.toString(),
         }
 
         console.log("Creating service relationship:", servicioData)
@@ -759,7 +757,7 @@ const CrearCita = () => {
               }
             </p>
             <p style="font-size: 14px; color: #7e2952; margin: 5px 0;">
-              💰 <strong>Total:</strong> $${total.toLocaleString()}
+              💰 <strong>Total:</strong> $${total.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             </p>
           </div>
           <p style="font-size: 14px; color: #666; margin-top: 15px;">
@@ -878,7 +876,13 @@ const CrearCita = () => {
                 <div key={idx} className="servicio-seleccionado-item">
                   <div className="servicio-seleccionado-header">
                     <div className="servicio-seleccionado-nombre">{s.nombre}</div>
-                    <div className="servicio-seleccionado-precio">${s.precio.toLocaleString()}</div>
+                    <div className="servicio-seleccionado-precio">$ 
+                      
+                      {(typeof s.precio === "string" ? Number.parseFloat(s.precio) || 0 : s.precio || 0).toLocaleString(
+                        "es-CO",
+                        { minimumFractionDigits: 0, maximumFractionDigits: 0 },
+                      )}
+                    </div>
                   </div>
                   <div className="servicio-seleccionado-duracion">{formatDuration(s.duracion)}</div>
                 </div>
@@ -996,7 +1000,7 @@ const CrearCita = () => {
 
         <div className="citas-cliente-total">
           <span>Total</span>
-          <span>${total.toLocaleString()}</span>
+          <span>${total.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}</span>
         </div>
       </div>
 
@@ -1021,7 +1025,16 @@ const CrearCita = () => {
                               Duración: {formatDuration(servicio.duracion)}
                             </p>
                           </div>
-                          <div className="descripcion-label">${servicio.precio.toLocaleString()}</div>
+                          <div className="descripcion-label">
+                            $
+                            {(typeof servicio.precio === "string"
+                              ? Number.parseFloat(servicio.precio) || 0
+                              : servicio.precio || 0
+                            ).toLocaleString("es-CO", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            })}
+                          </div>
                         </div>
                         <input
                           type="checkbox"
@@ -1286,7 +1299,7 @@ const CrearCita = () => {
                 color: "#b3005e",
               }}
             >
-              💰 Total: ${total.toLocaleString()}
+              💰 Total: ${total.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
             </div>
 
             <div style={{ textAlign: "center", marginTop: "35px" }}>

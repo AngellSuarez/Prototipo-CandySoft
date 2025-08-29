@@ -1262,10 +1262,19 @@ const GestionCompras = () => {
                                                 <p>{proveedor?.email}</p>
                                                 <p>{proveedor?.direccion}, {proveedor?.ciudad}</p>
                                             </div>
+
                                             <div className="informacion-proveedor" style={{ marginTop: "10px" }}>
                                                 <p><strong>Estado de la compra</strong></p>
                                                 <p>{compraSeleccionada.estado_nombre}</p>
                                             </div>
+
+                                            {compraSeleccionada.estado_nombre === "Cancelada" && (
+                                                <div className="informacion-proveedor" style={{ marginTop: "10px" }}>
+                                                    <p><strong>Motivo de cancelación</strong></p>
+                                                    <p>{compraSeleccionada.observacion}</p>
+                                                </div>
+                                            )}
+
                                         </>
                                     );
                                 })()}
@@ -1294,17 +1303,37 @@ const GestionCompras = () => {
                                         <div className="fila-factura" key={index}>
                                             <p className="col-insumo">{nombreInsumo}</p>
                                             <p className="dinero">
-                                                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(item.precioUnitario)}
+                                                {new Intl.NumberFormat("es-CO", {
+                                                    style: "currency",
+                                                    currency: "COP",
+                                                    minimumFractionDigits: 0,
+                                                    maximumFractionDigits: 0,
+                                                }).format(item.precioUnitario)}
                                             </p>
                                             <p className="dinero">{item.cantidad}</p>
                                             <p className="dinero">
-                                                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(subtotal)}
+                                                {new Intl.NumberFormat("es-CO", {
+                                                    style: "currency",
+                                                    currency: "COP",
+                                                    minimumFractionDigits: 0,
+                                                    maximumFractionDigits: 0,
+                                                }).format(subtotal)}
                                             </p>
                                             <p className="dinero">
-                                                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(iva)}
+                                                {new Intl.NumberFormat("es-CO", {
+                                                    style: "currency",
+                                                    currency: "COP",
+                                                    minimumFractionDigits: 0,
+                                                    maximumFractionDigits: 0,
+                                                }).format(iva)}
                                             </p>
                                             <p className="dinero">
-                                                {new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(total)}
+                                                {new Intl.NumberFormat("es-CO", {
+                                                    style: "currency",
+                                                    currency: "COP",
+                                                    minimumFractionDigits: 0,
+                                                    maximumFractionDigits: 0,
+                                                }).format(total)}
                                             </p>
                                         </div>
                                     );

@@ -18,7 +18,7 @@ export const listar_ventas = async (params = "") => {
   try {
     const response = await fetch(`${API_VENTAS}?${params}`, {
       method: "GET",
-      headers: getAuthHeaders("GET")
+      headers: getAuthHeaders("GET"),
     })
     if (!response.ok) throw new Error("Error al listar ventas")
     return await response.json()
@@ -32,7 +32,7 @@ export const obtenerServicios = async (citaId) => {
   try {
     const response = await fetch(`${API_SERVICIOS}?cita_id=${citaId}`, {
       method: "GET",
-      headers: getAuthHeaders("GET")
+      headers: getAuthHeaders("GET"),
     })
     if (!response.ok) throw new Error("Error al obtener servicios de la venta")
     return await response.json()
@@ -42,11 +42,30 @@ export const obtenerServicios = async (citaId) => {
   }
 }
 
+export const obtenerTodosManicuristas = async () => {
+  try {
+    const response = await fetch(`${API_MANICURISTAS}`, {
+      method: "GET",
+      headers: getAuthHeaders("GET"),
+    })
+    if (!response.ok) throw new Error("Error al obtener lista de manicuristas")
+    return await response.json()
+  } catch (error) {
+    console.error("Error en obtenerTodosManicuristas:", error)
+    return []
+  }
+}
+
 export const obtenerManicurista = async (id) => {
+  if (!id || id === undefined) {
+    console.error("Error: ID de manicurista no proporcionado")
+    return null
+  }
+
   try {
     const response = await fetch(`${API_MANICURISTAS}${id}/`, {
       method: "GET",
-      headers: getAuthHeaders("GET")
+      headers: getAuthHeaders("GET"),
     })
     if (!response.ok) throw new Error("Error al obtener manicurista por ID")
     return await response.json()
@@ -60,7 +79,7 @@ export const obtenerCliente = async (id) => {
   try {
     const response = await fetch(`${API_CLIENTE}${id}/`, {
       method: "GET",
-      headers: getAuthHeaders("GET")
+      headers: getAuthHeaders("GET"),
     })
     if (!response.ok) throw new Error("Error al obtener cliente por ID")
     const data = await response.json()
@@ -76,7 +95,7 @@ export const verificarDisponibilidadCliente = async (clienteId, fecha, hora) => 
   try {
     const response = await fetch(`${API_VENTAS}?cliente_id=${clienteId}&fecha=${fecha}`, {
       method: "GET",
-      headers: getAuthHeaders("GET")
+      headers: getAuthHeaders("GET"),
     })
     if (!response.ok) throw new Error("Error al verificar citas del cliente")
     const citas = await response.json()
@@ -95,7 +114,7 @@ export const verificarDisponibilidadCliente = async (clienteId, fecha, hora) => 
       try {
         const serviciosResponse = await fetch(`${API_SERVICIOS}?cita_id=${cita.id}`, {
           method: "GET",
-          headers: getAuthHeaders("GET")
+          headers: getAuthHeaders("GET"),
         })
 
         if (serviciosResponse.ok) {
@@ -108,8 +127,8 @@ export const verificarDisponibilidadCliente = async (clienteId, fecha, hora) => 
                 `https://angelsuarez.pythonanywhere.com/api/servicio/servicio/${servicio.servicio_id}/`,
                 {
                   method: "GET",
-                  headers: getAuthHeaders("GET")
-                }
+                  headers: getAuthHeaders("GET"),
+                },
               )
               if (servicioDetalleResponse.ok) {
                 const servicioDetalle = await servicioDetalleResponse.json()
