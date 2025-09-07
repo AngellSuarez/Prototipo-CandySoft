@@ -172,7 +172,7 @@ const GestionUsuarios = () => {
         case "correo":
           error = "El correo electrónico es obligatorio"
           break
-        case "rol_id": 
+        case "rol_id":
           error = "El rol es obligatorio"
           break
       }
@@ -262,7 +262,7 @@ const GestionUsuarios = () => {
             setPaginaActual(nuevaTotalPaginas || 1)
           }
 
-          return prev 
+          return prev
         })
 
         MySwal.fire(swalConfig)
@@ -316,15 +316,15 @@ const GestionUsuarios = () => {
 
   const openEditarModal = (usuario) => {
     setUsuarioEditando(usuario)
-    setModoVerUsuario(false) 
-    setEditarModalOpen(true) 
+    setModoVerUsuario(false)
+    setEditarModalOpen(true)
   }
 
   const closeEditarModal = () => {
     setUsuarioEditando(null)
     setEditarModalOpen(false)
-    setErroresEditar({}) 
-    setModoVerUsuario(false) 
+    setErroresEditar({})
+    setModoVerUsuario(false)
   }
 
   const cambiarPagina = (numero) => {
@@ -356,8 +356,8 @@ const GestionUsuarios = () => {
 
   const openVerModal = (usuario) => {
     setUsuarioEditando(usuario)
-    setModoVerUsuario(true) 
-    setEditarModalOpen(true) 
+    setModoVerUsuario(true)
+    setEditarModalOpen(true)
   }
 
   const handleBuscar = (e) => {
@@ -527,8 +527,8 @@ const GestionUsuarios = () => {
       try {
         const data = await listar_roles()
         const filteredRoles = data.filter((rol) => rol.nombre != "Manicurista" && rol.nombre != "Cliente")
-        setRoles(filteredRoles) 
-        console.log(filteredRoles) 
+        setRoles(filteredRoles)
+        console.log(filteredRoles)
       } catch (error) {
         console.error("Error al llamar los módulos: ", error)
         Swal.fire({
@@ -551,7 +551,7 @@ const GestionUsuarios = () => {
       const usuarioActual = usuarios.find((usuario) => usuario.id === id)
       const nuevoEstado = usuarioActual.estado === "Activo" ? "Inactivo" : "Activo"
 
-      setUsuarios((prevUsuarios) =>
+      setUsuarios((prevUsuarios) => 
         prevUsuarios.map((usuario) => (usuario.id === id ? { ...usuario, estado: nuevoEstado } : usuario)),
       )
 
@@ -946,6 +946,20 @@ const GestionUsuarios = () => {
                     return
                   }
 
+                  if (usuarioEditando.estado === "Activo") {
+                    const rolAsociado = roles.find(r => r.id === usuarioEditando.rol_id);
+                    if (rolAsociado?.estado === "Inactivo") {
+                      Swal.fire({
+                        icon: "warning",
+                        title: "Rol inactivo",
+                        text: `No puedes activar al usuario porque su rol "${rolAsociado.nombre}" está inactivo.`,
+                        customClass: { popup: "swal-rosado" }
+                      });
+                      setLoadingEditar(false);
+                      return;
+                    }
+                  }
+
                   try {
                     const respuesta = await editar_usuario(
                       usuarioEditando.id,
@@ -957,6 +971,7 @@ const GestionUsuarios = () => {
                       usuarioEditando.rol_id,
                       usuarioEditando.tipo_documento,
                       usuarioEditando.numero_documento,
+                      usuarioEditando.estado,
                     )
 
                     if (respuesta?.errores) {
@@ -1181,6 +1196,25 @@ const GestionUsuarios = () => {
                               {rol.nombre}
                             </option>
                           ))}
+                        </select>
+                      </div>
+                    </div>
+                    <div className="campo">
+                      <label className="subtitulo-editar-todos">Estado:</label>
+                      <div className="campo">
+                        <select
+                          name="estado"
+                          className={selectClass("rol")}
+                          value={usuarioEditando.estado}
+                          onChange={handleEditarCambio}
+                          style={{
+                            pointerEvents: modoVerUsuario ? "none" : "auto"
+                          }}
+                        >
+                          <option value="">Selecciona el estado</option>
+                          <option value="Activo">Activo</option>
+                          <option value="Inactivo">Inactivo</option>
+
                         </select>
                       </div>
                     </div>
