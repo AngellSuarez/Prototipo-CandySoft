@@ -122,7 +122,7 @@ async function crear_usuario(username, nombre, apellido, correo, rol_id, tipo_do
     }
 }
 
-async function editar_usuario(id, username, password, nombre, apellido, correo, rol_id, tipo_documento, numero_documento) {
+async function editar_usuario(id, username, password, nombre, apellido, correo, rol_id, tipo_documento, numero_documento, estado) {
     try {
         const userData = {
             username: username,
@@ -132,7 +132,8 @@ async function editar_usuario(id, username, password, nombre, apellido, correo, 
             rol_id: rol_id,
             password: password,
             tipo_documento: tipo_documento,
-            numero_documento: numero_documento
+            numero_documento: numero_documento,
+            estado: estado
         };
 
         const response = await fetch(`${BASE_URL}usuarios/${id}/`, {
