@@ -951,7 +951,7 @@ const GestionRoles = () => {
                                     <label className="subtitulo-editar-todos">Estado:</label>
                                     <select
                                         name="estado"
-                                        value={rolEditando?.estado ? "Activo" : "Inactivo"}
+                                        value={rolEditando?.estado || ""}
                                         onChange={handleEditarChange}
                                         onKeyDown={(e) => modoVer && e.preventDefault()}
                                         style={{
