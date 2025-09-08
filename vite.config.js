@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     host: true,  // Listen on all network interfaces
     preview: {
-      allowedHosts: ['prototipo-candysoft.onrender.com'], // Add your Render hostname here
+      allowedHosts: ['prototipo-candysoft.onrender.com'.'prototipo-candysoft.onrender.com'], // Add your Render hostname here
     },
   },
 })
