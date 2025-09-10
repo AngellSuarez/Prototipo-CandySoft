@@ -470,15 +470,26 @@ const GestionRoles = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    await borrar_rol(rol.id);
-                    MySwal.fire({
-                        title: "Eliminado",
-                        text: `El rol ${rol.nombre} ha sido eliminado.`,
-                        icon: "success",
-                        confirmButtonColor: '#7e2952',
-                        customClass: { popup: 'swal-rosado' }
+                    const resp = await borrar_rol(rol.id);
 
-                    });
+                    if (resp) {
+                        MySwal.fire({
+                            title: "Rol inactivado",
+                            text: `El rol ${rol.nombre} tenía usuarios asociados, por lo que fue inactivado.`,
+                            icon: "info",
+                            confirmButtonColor: '#7e2952',
+                            customClass: { popup: 'swal-rosado' }
+                        });
+                    } else {
+                        MySwal.fire({
+                            title: "Eliminado",
+                            text: `El rol ${rol.nombre} ha sido eliminado.`,
+                            icon: "success",
+                            confirmButtonColor: '#7e2952',
+                            customClass: { popup: 'swal-rosado' }
+                        });
+                    }
+
                     const dataActualizada = await listar_roles();
                     setRoles(dataActualizada);
                 } catch (error) {
@@ -493,6 +504,7 @@ const GestionRoles = () => {
             }
         });
     };
+
 
     const handleBuscar = (e) => {
         setBusqueda(e.target.value.toLowerCase());

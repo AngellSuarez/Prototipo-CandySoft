@@ -91,22 +91,34 @@ const Login = () => {
             localStorage.setItem("apellido", responseData.apellido)
             localStorage.setItem("rol", responseData.rol)
 
-            switch (responseData.rol) {
-                case "Administrador":
-                    navigate("/administrador/dashboard")
-                    break
-                case "Cliente":
-                    navigate("/cliente")
-                    break
-                case "Manicurista":
-                    navigate("/manicurista/dashboard")
-                    break
-                case "Recepcionista":
-                    navigate("/recepcionista/dashboard")
-                    break
-                default:
-                    navigate("/")
-            }
+            Swal.fire({
+                icon: "success",
+                title: "¡Bienvenido!",
+                text: "Inicio de sesión exitoso. Redirigiendo...",
+                timer: 2000,
+                timerProgressBar: true,
+                showConfirmButton: false,
+                customClass: {
+                    popup: "swal-rosado",
+                },
+            }).then(() => {
+                switch (responseData.rol) {
+                    case "Administrador":
+                        navigate("/administrador/dashboard")
+                        break
+                    case "Cliente":
+                        navigate("/cliente")
+                        break
+                    case "Manicurista":
+                        navigate("/manicurista/dashboard")
+                        break
+                    case "Recepcionista":
+                        navigate("/recepcionista/dashboard")
+                        break
+                    default:
+                        navigate("/")
+                }
+            })
         } catch (error) {
             Swal.fire({
                 icon: "error",
@@ -134,6 +146,7 @@ const Login = () => {
             setIsLoading(false)
         }
     }
+
 
     return (
         <div className="wrapper">
