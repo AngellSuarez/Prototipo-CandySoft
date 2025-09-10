@@ -40,7 +40,7 @@ const CambiarPassword = () => {
         if (!validar()) return;
 
         try {
-            await axios.post("http://127.0.0.1:8000/api/auth/password/cambiar/", {
+            await axios.post("https://angelsuarez.pythonanywhere.com/api/auth/password/cambiar/", {
                 correo,
                 nueva_password: nuevaPassword,
             });

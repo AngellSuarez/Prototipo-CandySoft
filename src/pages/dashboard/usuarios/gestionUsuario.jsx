@@ -349,9 +349,43 @@ const GestionUsuarios = () => {
       [name]: value,
     }))
 
-    if (erroresEditar[name]) {
-      validarCampo(name, value)
+    // Aquí validamos siempre, no solo si ya había error
+    const error = obtenerErrorCampo(name, value)
+
+    setErroresEditar((prev) => ({
+      ...prev,
+      [name]: error,
+    }))
+  }
+
+  const obtenerErrorCampo = (name, value) => {
+    if (!value.trim()) {
+      switch (name) {
+        case "username":
+          return "El nombre de usuario es obligatorio"
+        case "nombre":
+          return "El nombre es obligatorio"
+        case "apellido":
+          return "El apellido es obligatorio"
+        case "correo":
+          return "El correo electrónico es obligatorio"
+        case "rol_id":
+          return "El rol es obligatorio"
+        case "tipo_documento":
+          return "El tipo de documento es obligatorio"
+        case "numero_documento":
+          return "El número de documento es obligatorio"
+        case "estado":
+          return "El estado es obligatorio"
+        default:
+          return ""
+      }
+    } else {
+      if (name === "correo" && !/\S+@\S+\.\S+/.test(value)) {
+        return "Correo electrónico inválido."
+      }
     }
+    return ""
   }
 
   const openVerModal = (usuario) => {
@@ -551,7 +585,7 @@ const GestionUsuarios = () => {
       const usuarioActual = usuarios.find((usuario) => usuario.id === id)
       const nuevoEstado = usuarioActual.estado === "Activo" ? "Inactivo" : "Activo"
 
-      setUsuarios((prevUsuarios) => 
+      setUsuarios((prevUsuarios) =>
         prevUsuarios.map((usuario) => (usuario.id === id ? { ...usuario, estado: nuevoEstado } : usuario)),
       )
 
@@ -630,7 +664,7 @@ const GestionUsuarios = () => {
         <table className="roles-table">
           <thead>
             <tr>
-              <th>Nombre Apellido</th>
+              <th>Nombre completo</th>
               <th>Número documento</th>
               <th>Rol</th>
               <th>Estado</th>
@@ -758,6 +792,9 @@ const GestionUsuarios = () => {
                       }}
                     />
                     {errores.numero_documento && <p className="error-texto">{errores.numero_documento}</p>}
+                    {formData.numero_documento.length === 15 && (
+                      <p className="error-texto">Has alcanzado el máximo de 15 caracteres.</p>
+                    )}
                   </div>
                 </div>
 
@@ -772,7 +809,7 @@ const GestionUsuarios = () => {
                       placeholder={renderPlaceholder("Nombres", "nombre")}
                       className={inputClass("nombre")}
                       value={formData.nombre}
-                      maxLength={40}
+                      maxLength={25}
                       onChange={(e) => {
                         const value = e.target.value
                         const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/
@@ -787,8 +824,8 @@ const GestionUsuarios = () => {
                         {errores.nombre}
                       </p>
                     )}
-                    {formData.nombre.length === 40 && (
-                      <p className="error-texto">Has alcanzado el máximo de 40 caracteres.</p>
+                    {formData.nombre.length === 25 && (
+                      <p className="error-texto">Has alcanzado el máximo de 25 caracteres.</p>
                     )}
                   </div>
 
@@ -802,7 +839,7 @@ const GestionUsuarios = () => {
                       placeholder={renderPlaceholder("Apellidos", "apellido")}
                       className={inputClass("apellido")}
                       value={formData.apellido}
-                      maxLength={40}
+                      maxLength={25}
                       onChange={(e) => {
                         const value = e.target.value
                         const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/
@@ -813,8 +850,8 @@ const GestionUsuarios = () => {
                       onBlur={handleBlur}
                     />
                     {errores.apellido && <p className="error-texto">{errores.apellido}</p>}
-                    {formData.apellido.length === 40 && (
-                      <p className="error-texto"> Has alcanzado el máximo de 40 caracteres.</p>
+                    {formData.apellido.length === 25 && (
+                      <p className="error-texto"> Has alcanzado el máximo de 25 caracteres.</p>
                     )}
                   </div>
                 </div>
@@ -1046,7 +1083,6 @@ const GestionUsuarios = () => {
                         id="tipo_documento"
                         className={selectClass("rol")}
                         onChange={handleEditarCambio}
-                        onBlur={handleBlur}
                         value={usuarioEditando.tipo_documento || ""}
                         style={{ pointerEvents: modoVerUsuario ? "none" : "auto" }}
                       >
@@ -1055,6 +1091,10 @@ const GestionUsuarios = () => {
                         <option value="CE">Cédula de Extranjería</option>
                         <option value="PA">Pasaporte</option>
                       </select>
+
+                      {erroresEditar.tipo_documento && !modoVerUsuario && (
+                        <p className="error-mensaje">{erroresEditar.tipo_documento}</p>
+                      )}
                     </div>
                     <div className="campo relative">
                       <label htmlFor="numero_documento" className="subtitulo-editar-todos">
@@ -1076,6 +1116,7 @@ const GestionUsuarios = () => {
                         }}
                         readOnly={modoVerUsuario}
                       />
+
                       {erroresEditar.numero_documento && !modoVerUsuario && (
                         <p className="error-mensaje">{erroresEditar.numero_documento}</p>
                       )}
@@ -1094,7 +1135,7 @@ const GestionUsuarios = () => {
                         onChange={(e) => {
                           const value = e.target.value
                           const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/
-                          if (regex.test(value) && value.length <= 40) {
+                          if (regex.test(value) && value.length <= 25) {
                             handleEditarCambio(e)
                           }
                         }}
@@ -1106,8 +1147,8 @@ const GestionUsuarios = () => {
                       {erroresEditar.nombre && !modoVerUsuario && (
                         <p className="error-mensaje">{erroresEditar.nombre}</p>
                       )}
-                      {usuarioEditando.nombre.length === 40 && !modoVerUsuario && (
-                        <p className="error-mensaje">Has alcanzado el máximo de 40 caracteres.</p>
+                      {usuarioEditando.nombre.length === 25 && !modoVerUsuario && (
+                        <p className="error-mensaje">Has alcanzado el máximo de 25 caracteres.</p>
                       )}
                     </div>
 
@@ -1120,7 +1161,7 @@ const GestionUsuarios = () => {
                         onChange={(e) => {
                           const value = e.target.value
                           const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/
-                          if (regex.test(value) && value.length <= 40) {
+                          if (regex.test(value) && value.length <= 25) {
                             handleEditarCambio(e)
                           }
                         }}
@@ -1132,8 +1173,8 @@ const GestionUsuarios = () => {
                       {erroresEditar.apellido && !modoVerUsuario && (
                         <p className="error-mensaje">{erroresEditar.apellido}</p>
                       )}
-                      {usuarioEditando.apellido.length === 40 && !modoVerUsuario && (
-                        <p className="error-mensaje">Has alcanzado el máximo de 40 caracteres.</p>
+                      {usuarioEditando.apellido.length === 25 && !modoVerUsuario && (
+                        <p className="error-mensaje">Has alcanzado el máximo de 25 caracteres.</p>
                       )}
                     </div>
                   </div>
@@ -1150,11 +1191,19 @@ const GestionUsuarios = () => {
                         className="input-texto"
                         readOnly={modoVerUsuario}
                         style={{ pointerEvents: modoVerUsuario ? "none" : "auto" }}
+                        required
                       />
                       {erroresEditar.correo && !modoVerUsuario && (
                         <p className="error-mensaje">{erroresEditar.correo}</p>
                       )}
+
+                      {!modoVerUsuario &&
+                        usuarioEditando.correo &&
+                        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(usuarioEditando.correo) && (
+                          <p className="error-mensaje">El correo no es válido</p>
+                        )}
                     </div>
+
 
                     <div className="campo">
                       <label className="subtitulo-editar-todos">Nombre de usuario:</label>
@@ -1197,6 +1246,10 @@ const GestionUsuarios = () => {
                             </option>
                           ))}
                         </select>
+
+                        {erroresEditar.rol_id && !modoVerUsuario && (
+                          <p className="error-mensaje">{erroresEditar.rol_id}</p>
+                        )}
                       </div>
                     </div>
                     <div className="campo">
@@ -1207,15 +1260,16 @@ const GestionUsuarios = () => {
                           className={selectClass("rol")}
                           value={usuarioEditando.estado}
                           onChange={handleEditarCambio}
-                          style={{
-                            pointerEvents: modoVerUsuario ? "none" : "auto"
-                          }}
+                          style={{ pointerEvents: modoVerUsuario ? "none" : "auto" }}
                         >
                           <option value="">Selecciona el estado</option>
                           <option value="Activo">Activo</option>
                           <option value="Inactivo">Inactivo</option>
-
                         </select>
+
+                        {erroresEditar.estado && !modoVerUsuario && (
+                          <p className="error-mensaje">{erroresEditar.estado}</p>
+                        )}
                       </div>
                     </div>
                   </div>

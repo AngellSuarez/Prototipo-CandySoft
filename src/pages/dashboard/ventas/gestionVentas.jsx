@@ -1053,6 +1053,16 @@ const GestionVentas = () => {
       return
     }
 
+    if (serviciosCita.length <= 1) {
+      Swal.fire({
+        icon: "warning",
+        title: "No se puede eliminar",
+        text: "Debe tener al menos un servicio en la cita.",
+        customClass: { popup: "swal-rosado" },
+      })
+      return
+    }
+
     const resultado = await Swal.fire({
       title: `Eliminar servicio`,
       html: `<p class="texto-blanco">¿Estás seguro de que deseas eliminar el servicio <strong>${servicio.servicio_nombre}</strong>?</p>`,
@@ -1242,16 +1252,16 @@ const GestionVentas = () => {
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay()
   }
 
-  const formatDate = (date) => {
+  const formatDateValue = (date) => {
     return date.toISOString().split("T")[0]
   }
 
-  const getVentasForDate = (date) => {
-    const dateString = formatDate(date)
+  const getVentasForDateValue = (date) => {
+    const dateString = formatDateValue(date)
     return ventasFiltradasTerminadas.filter((venta) => venta.Fecha === dateString)
   }
 
-  const navigateMonth = (direction) => {
+  const navigateMonthValue = (direction) => {
     const newDate = new Date(fechaActual)
     newDate.setMonth(newDate.getMonth() + direction)
     setFechaActual(newDate)
@@ -1283,8 +1293,8 @@ const GestionVentas = () => {
 
     for (let day = 1; day <= daysInMonth; day++) {
       const currentDate = new Date(fechaActual.getFullYear(), fechaActual.getMonth(), day)
-      const ventasDelDia = getVentasForDate(currentDate)
-      const isToday = formatDate(currentDate) === formatDate(new Date())
+      const ventasDelDia = getVentasForDateValue(currentDate)
+      const isToday = formatDateValue(currentDate) === formatDateValue(new Date())
 
       days.push(
         <div key={day} className={`calendar-day ${isToday ? "calendar-day-today" : ""}`}>
@@ -1318,11 +1328,11 @@ const GestionVentas = () => {
             {monthNames[fechaActual.getMonth()]} {fechaActual.getFullYear()}
           </h2>
           <div className="calendar-navigation">
-            <button className="calendar-nav-btn" onClick={() => navigateMonth(-1)}>
+            <button className="calendar-nav-btn" onClick={() => navigateMonthValue(-1)}>
               <ChevronLeft size={20} />
               <span className="sr-only">Mes anterior</span>
             </button>
-            <button className="calendar-nav-btn" onClick={() => navigateMonth(1)}>
+            <button className="calendar-nav-btn" onClick={() => navigateMonthValue(1)}>
               <ChevronRight size={20} />
               <span className="sr-only">Mes siguiente</span>
             </button>
@@ -1379,12 +1389,13 @@ const GestionVentas = () => {
                   <td>${!isNaN(Number(cita.Total)) ? Number(cita.Total).toLocaleString() : "0"}</td>
                   <td>
                     <span
-                      className={`estado-texto ${cita.estado_nombre === "Pendiente"
+                      className={`estado-texto ${
+                        cita.estado_nombre === "Pendiente"
                           ? "estado-pendiente"
                           : cita.estado_nombre === "Terminada"
                             ? "estado-terminada"
                             : ""
-                        }`}
+                      }`}
                     >
                       {cita.estado_nombre}
                     </span>
@@ -2172,25 +2183,25 @@ const GestionVentas = () => {
                               value={
                                 precioUnitario
                                   ? new Intl.NumberFormat("es-CO", {
-                                    style: "currency",
-                                    currency: "COP",
-                                    minimumFractionDigits: 0,
-                                  }).format(precioUnitario)
+                                      style: "currency",
+                                      currency: "COP",
+                                      minimumFractionDigits: 0,
+                                    }).format(precioUnitario)
                                   : ""
                               }
                               onChange={(e) => {
-                                const valorLimpio = e.target.value.replace(/[^0-9]/g, "");
-                                const nuevoPrecio = Number(valorLimpio);
+                                const valorLimpio = e.target.value.replace(/[^0-9]/g, "")
+                                const nuevoPrecio = Number(valorLimpio)
 
-                                setPrecioUnitario(nuevoPrecio);
+                                setPrecioUnitario(nuevoPrecio)
 
                                 if (nuevoPrecio > 0) {
-                                  setModalErrores((prev) => ({ ...prev, precio: "" }));
+                                  setModalErrores((prev) => ({ ...prev, precio: "" }))
                                 } else {
                                   setModalErrores((prev) => ({
                                     ...prev,
                                     precio: "El precio no puede ser 0",
-                                  }));
+                                  }))
                                 }
                               }}
                               placeholder="Precio Unitario"
@@ -2234,42 +2245,6 @@ const GestionVentas = () => {
                                           className="btn-eliminar-servicio-agregar"
                                           onClick={async () => {
                                             eliminarServicioDeCita(servicio, index)
-                                            const resultado = await Swal.fire({
-                                              title: `Eliminar servicio`,
-                                              html: `<p class="texto-blanco">¿Estás seguro de que deseas eliminar el servicio <strong>${servicio.nombre || servicio.servicio_nombre}</strong>?</p>`,
-                                              icon: "warning",
-                                              showCancelButton: true,
-                                              confirmButtonText: "Sí, eliminar",
-                                              cancelButtonText: "Cancelar",
-                                              confirmButtonColor: "#7e2952",
-                                              cancelButtonColor: "#d8d6d7",
-                                              reverseButtons: true,
-                                              customClass: {
-                                                popup: "swal-rosado",
-                                              },
-                                            })
-
-                                            if (resultado.isConfirmed) {
-                                              try {
-                                                console.log("Eliminando servicio con ID:", servicio.id)
-
-                                                if (servicio.id) {
-                                                  await axios.delete(
-                                                    `https://angelsuarez.pythonanywhere.com/api/cita-venta/servicios-cita/${servicio.id}/`,
-                                                  )
-                                                }
-
-                                                const nuevosServicios = serviciosCita.filter((_, i) => i !== index)
-                                                setServiciosCita(nuevosServicios)
-                                              } catch (error) {
-                                                console.error("Error eliminando el servicio en la API:", error)
-                                                Swal.fire(
-                                                  "Error",
-                                                  "No se pudo eliminar el servicio. Verifica la conexión con la API.",
-                                                  "error",
-                                                )
-                                              }
-                                            }
                                           }}
                                         >
                                           ✕
@@ -2363,7 +2338,7 @@ const GestionVentas = () => {
                               currency: "COP",
                             }).format(
                               serviciosCita.reduce((acc, s) => acc + Number(s.subtotal || s.precio || 0), 0) +
-                              serviciosEnModal.reduce((acc, s) => acc + Number(s.precioUnitario || 0), 0),
+                                serviciosEnModal.reduce((acc, s) => acc + Number(s.precioUnitario || 0), 0),
                             )}`}
                             className="input-texto"
                             readOnly
