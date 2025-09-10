@@ -67,7 +67,7 @@ const Login = () => {
         setIsLoading(true)
 
         Swal.fire({
-            title: "Iniciando sesión...",
+            title: "Validando datos...",
             text: "Espera un momento por favor",
             customClass: {
                 popup: "swal-rosado",
