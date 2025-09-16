@@ -88,7 +88,7 @@ async function listar_manicuristas_para_citas() {
 
 async function listar_manicuristas_activas_para_citas() {
     try {
-        const response = await fetch(`${BASE_URL_MANICURISTA/activos}`, { method: 'GET', headers: getAuthHeaders("GET") });
+        const response = await fetch(`https://angelsuarez.pythonanywhere.com/api/usuario/manicuristas/activos/`, { method: 'GET', headers: getAuthHeaders("GET") });
         if (!response.ok) throw new Error('Error al listar citas');
         return await response.json();
     } catch (error) {
