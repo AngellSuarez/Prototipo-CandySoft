@@ -7,7 +7,7 @@ export default defineConfig({
   preview: {
     host: true,
     port: 8080, 
-    allowedHosts: ['prototipo-candysoft.onrender.com'],
+    allowedHosts: ['prototipo-candysoft.onrender.com','candynails.shop'],
   },
   server: {
     host: true,
