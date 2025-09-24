@@ -76,7 +76,7 @@ const CrearCita = () => {
   useEffect(() => {
     const fetchManicuristas = async () => {
       try {
-        const response = await fetch("https://angelsuarez.pythonanywhere.com/api/usuario/manicuristas/")
+        const response = await fetch("https://angelsuarez.pythonanywhere.com/api/usuario/manicuristas/activos/")
         if (response.ok) {
           const data = await response.json()
           const manicuristasActivas = data.filter((manicurista) => manicurista.estado === "Activo")

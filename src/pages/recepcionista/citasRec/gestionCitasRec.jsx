@@ -16,6 +16,7 @@ import {
     listar_estado_cita,
     crear_cita,
     verificarDisponibilidadCliente,
+    listar_manicuristas_activas_para_citas,
 } from "../../../services/citas_services"
 import { Link } from "react-router-dom"
 import { Bell, User, Calendar, Table, ChevronLeft, ChevronRight, Star, X } from "lucide-react"
@@ -131,7 +132,7 @@ const GestionCitasRec = () => {
     useEffect(() => {
         const fetchManicuristas = async () => {
             try {
-                const data = await listar_manicuristas_para_citas()
+                const data = await listar_manicuristas_activas_para_citas()
                 setManicuristas(data || [])
             } catch (err) {
                 console.error("Error al cargar manicuristas:", err)

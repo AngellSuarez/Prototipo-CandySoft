@@ -122,7 +122,9 @@ const Login = () => {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "No se pudo iniciar sesión. Verifica tus credenciales.",
+                text: typeof error === "string"
+                    ? error.replace(/^Error:\s*/, "")
+                    : (error.message ? error.message.replace(/^Error:\s*/, "") : "Ocurrió un error"),
                 customClass: {
                     popup: "swal-rosado",
                 },
