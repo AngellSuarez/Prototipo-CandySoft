@@ -750,11 +750,10 @@ const CrearCita = () => {
               🕒 <strong>Hora:</strong> ${formatTime(horaSeleccionada)}
             </p>
             <p style="font-size: 14px; color: #7e2952; margin: 5px 0;">
-              👩‍🎨 <strong>Manicurista:</strong> ${
-                manicuristaSeleccionada === "Según la disponibilidad"
-                  ? "Asignada según disponibilidad"
-                  : `${manicuristaSeleccionada.nombre} ${manicuristaSeleccionada.apellido}`
-              }
+              👩‍🎨 <strong>Manicurista:</strong> ${manicuristaSeleccionada === "Según la disponibilidad"
+            ? "Asignada según disponibilidad"
+            : `${manicuristaSeleccionada.nombre} ${manicuristaSeleccionada.apellido}`
+          }
             </p>
             <p style="font-size: 14px; color: #7e2952; margin: 5px 0;">
               💰 <strong>Total:</strong> $${total.toLocaleString("es-CO", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
@@ -842,17 +841,6 @@ const CrearCita = () => {
   return (
     <div className="citas-cliente-layout">
       <div className="citas-cliente-left">
-        <div className="citas-cliente-btn-container">
-          <button className="citas-cliente-btn citas-cliente-back" onClick={handleRegresar}>
-            Regresar
-          </button>
-          {paso < 5 && (
-            <button className="citas-cliente-btn citas-cliente-next" onClick={handleContinuar}>
-              Continuar
-            </button>
-          )}
-        </div>
-
         <div className="citas-cliente-sede">
           {serviciosSeleccionados.length === 0 ? (
             <p>Todavía no hay servicios seleccionados.</p>
@@ -876,8 +864,8 @@ const CrearCita = () => {
                 <div key={idx} className="servicio-seleccionado-item">
                   <div className="servicio-seleccionado-header">
                     <div className="servicio-seleccionado-nombre">{s.nombre}</div>
-                    <div className="servicio-seleccionado-precio">$ 
-                      
+                    <div className="servicio-seleccionado-precio">$
+
                       {(typeof s.precio === "string" ? Number.parseFloat(s.precio) || 0 : s.precio || 0).toLocaleString(
                         "es-CO",
                         { minimumFractionDigits: 0, maximumFractionDigits: 0 },
@@ -1053,9 +1041,8 @@ const CrearCita = () => {
         {paso === 2 && (
           <div className="citas-cliente-manicuristas">
             <div
-              className={`citas-cliente-manicurista-item ${
-                manicuristaSeleccionada === "Según la disponibilidad" ? "seleccionada" : ""
-              }`}
+              className={`citas-cliente-manicurista-item ${manicuristaSeleccionada === "Según la disponibilidad" ? "seleccionada" : ""
+                }`}
               onClick={() => setManicuristaSeleccionada("Según la disponibilidad")}
             >
               {manicuristaSeleccionada === "Según la disponibilidad" ? (
@@ -1069,9 +1056,8 @@ const CrearCita = () => {
             {manicuristas.map((manicurista, idx) => (
               <div
                 key={idx}
-                className={`citas-cliente-manicurista-item ${
-                  manicuristaSeleccionada?.usuario_id === manicurista.usuario_id ? "seleccionada" : ""
-                }`}
+                className={`citas-cliente-manicurista-item ${manicuristaSeleccionada?.usuario_id === manicurista.usuario_id ? "seleccionada" : ""
+                  }`}
                 onClick={() => setManicuristaSeleccionada(manicurista)}
               >
                 {manicuristaSeleccionada?.usuario_id === manicurista.usuario_id ? (
@@ -1338,6 +1324,17 @@ const CrearCita = () => {
             </div>
           </div>
         )}
+
+        <div className="citas-cliente-btn-container">
+          <button className="citas-cliente-btn citas-cliente-back" onClick={handleRegresar}>
+            Regresar
+          </button>
+          {paso < 5 && (
+            <button className="citas-cliente-btn citas-cliente-next" onClick={handleContinuar}>
+              Continuar
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

@@ -7,32 +7,47 @@ const ClientePerfil = () => {
     const [cliente, setCliente] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [menuMobile, setMenuMobile] = useState(false);
-    const [showMenuServicio, setShowMenuServicio] = useState(false);
-    const [showMenu, setShowMenu] = useState(false);
-    const [subMenuServicio, setSubMenuServicio] = useState(null);
     const [submenuPosition, setSubmenuPosition] = useState(0);
+    const [servicios, setServicios] = useState([])
+    const [serviciosPorTipo, setServiciosPorTipo] = useState({});
+    const [showMenu, setShowMenu] = useState(false);
+    const [showMenuServicio, setShowMenuServicio] = useState(false);
+    const [subMenuServicio, setSubMenuServicio] = useState(null);
     const itemRefs = useRef({});
+    const [loading, setLoading] = useState(true)
 
     const navigate = useNavigate();
 
-    const subServicios = {
-        Manicure: [
-            { nombre: 'Semipermanente', id: '1' },
-            { nombre: 'Tradicional', id: '2' },
-            { nombre: 'Spa', id: '3' },
-        ],
-        Pedicure: [
-            { nombre: 'Semipermanente', id: '4' },
-            { nombre: 'Tradicional', id: '5' },
-            { nombre: 'Spa', id: '6' },
-        ],
-        'Uñas en acrílico': [
-            { nombre: 'Esculpidas', id: '7' },
-            { nombre: 'Decoradas', id: '8' },
-            { nombre: 'Francesas', id: '9' },
-            { nombre: 'Uñas Baby Boomer', id: '10' },
-        ],
-    };
+    useEffect(() => {
+        const fetchServicios = async () => {
+            try {
+                const response = await fetch("https://angelsuarez.pythonanywhere.com/api/servicio/servicio/")
+                if (response.ok) {
+                    const data = await response.json()
+                    const serviciosActivos = data.filter((servicio) => servicio.estado === "Activo")
+                    setServicios(serviciosActivos)
+
+                    const grouped = serviciosActivos.reduce((acc, servicio) => {
+                        if (!acc[servicio.tipo]) {
+                            acc[servicio.tipo] = []
+                        }
+                        acc[servicio.tipo].push(servicio)
+                        return acc
+                    }, {})
+
+                    setServiciosPorTipo(grouped)
+                } else {
+                    console.error("Error fetching servicios:", response.statusText)
+                }
+            } catch (error) {
+                console.error("Error fetching servicios:", error)
+            } finally {
+                setLoading(false)
+            }
+        }
+
+        fetchServicios()
+    }, [])
 
     useEffect(() => {
         const fetchCliente = async () => {
@@ -89,7 +104,9 @@ const ClientePerfil = () => {
             setCliente(updatedData);
             setIsEditing(false);
 
-            Swal.fire('Éxito', 'Perfil actualizado correctamente', 'success');
+            Swal.fire('Éxito', 'Perfil actualizado correctamente', 'success').then(() => {
+                navigate('/cliente');
+            });
         } catch (error) {
             console.error(error);
             Swal.fire('Error', `No se pudo actualizar: ${error.message}`, 'error');
@@ -119,38 +136,41 @@ const ClientePerfil = () => {
                         onMouseEnter={() => !menuMobile && setShowMenuServicio(true)}
                         onMouseLeave={() => !menuMobile && setShowMenuServicio(false)}
                     >
-                        <div className={`acceso-link ${showMenuServicio ? 'active' : ''}`}>
-                            <Link to="/cliente/servicios" onClick={() => {
-                                setMenuMobile(false);
-                                setShowMenuServicio(!showMenuServicio);
-                            }}>
+                        <div className={`acceso-link ${showMenuServicio ? "active" : ""}`}>
+                            <Link
+                                to="/cliente/servicios"
+                                onClick={() => {
+                                    setMenuMobile(false)
+                                    setShowMenuServicio(!showMenuServicio)
+                                }}
+                            >
                                 Servicios
                             </Link>
-                            <span className={`flecha-acceso ${showMenuServicio ? 'rotate' : ''}`}>&#9660;</span>
+                            <span className={`flecha-acceso ${showMenuServicio ? "rotate" : ""}`}>&#9660;</span>
                         </div>
 
-                        <div className={`submenu-acceso ${showMenuServicio ? 'show' : ''}`}>
-                            {Object.keys(subServicios).map((servicio) => (
+                        <div className={`submenu-acceso ${showMenuServicio ? "show" : ""}`}>
+                            {Object.keys(serviciosPorTipo).map((tipo) => (
                                 <div
-                                    key={servicio}
-                                    className={`submenu-item-acceso ${subMenuServicio === servicio ? 'active' : ''}`}
-                                    ref={(el) => (itemRefs.current[servicio] = el)}
-                                    onClick={() => setSubMenuServicio(subMenuServicio === servicio ? null : servicio)}
+                                    key={tipo}
+                                    className={`submenu-item-acceso ${subMenuServicio === tipo ? "active" : ""}`}
+                                    ref={(el) => (itemRefs.current[tipo] = el)}
+                                    onClick={() => (subMenuServicio === tipo ? setSubMenuServicio(null) : setSubMenuServicio(tipo))}
                                 >
-                                    {servicio}
-                                    {subMenuServicio === servicio && (
+                                    {tipo}
+                                    {subMenuServicio === tipo && (
                                         <div className="sub-submenu-acceso" style={{ top: submenuPosition }}>
-                                            {subServicios[servicio].map((sub) => (
+                                            {serviciosPorTipo[tipo].map((servicio) => (
                                                 <div
-                                                    key={sub.nombre}
+                                                    key={servicio.id}
                                                     className="submenu-item-acceso"
                                                     onClick={() => {
-                                                        navigate(`/cliente/servicios/${sub.id}`);
-                                                        setShowMenuServicio(false);
-                                                        setSubMenuServicio(null);
+                                                        navigate(`/cliente/servicios/${servicio.id}`)
+                                                        setShowMenuServicio(false)
+                                                        setSubMenuServicio(null)
                                                     }}
                                                 >
-                                                    {sub.nombre}
+                                                    {servicio.nombre}
                                                 </div>
                                             ))}
                                         </div>
