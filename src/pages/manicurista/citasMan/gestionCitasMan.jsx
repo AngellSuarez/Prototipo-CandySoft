@@ -78,8 +78,17 @@ const GestionCitasMan = () => {
                     serviciosPorCita[item.cita_id].push(item.nombre)
                 })
 
+                const citasConEstadosPermitidos = citas.filter((cita) =>
+                    ["En proceso", "Pendiente", "Cancelada"].includes(cita.estado_nombre),
+                );
+
                 // Filter appointments for the logged-in manicurist
-                const citasFiltradas = data?.filter((cita) => cita.manicurista_id === Number.parseInt(userId))
+                const citasFiltradas = citasConEstadosPermitidos
+                    .slice() // copia el array
+                    .reverse() // invierte el orden: primero las últimas
+                    .filter((cita) =>
+                        Object.values(cita).some((valor) => String(valor).toLowerCase().includes(busqueda)),
+                    );
 
                 citasFiltradas.forEach((cita) => {
                     const nombres = serviciosPorCita[cita.id] || []
@@ -350,7 +359,7 @@ const GestionCitasMan = () => {
             <div className="fila-formulario">
                 <h1 className="titulo">Gestión de citas</h1>
 
-                <div style={{ marginLeft: 670}} className="iconos-perfil">
+                <div style={{ marginLeft: 670 }} className="iconos-perfil">
                     <Link to="/manicurista/dashboard/perfil">
                         <span title="Tu perfil">
                             <User className="icon" />

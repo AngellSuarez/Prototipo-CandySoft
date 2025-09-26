@@ -760,9 +760,12 @@ const GestionCitas = () => {
         ["En proceso", "Pendiente", "Cancelada"].includes(cita.estado_nombre),
     )
 
-    const citasFiltradas = citasConEstadosPermitidos.filter((cita) =>
-        Object.values(cita).some((valor) => String(valor).toLowerCase().includes(busqueda)),
-    )
+    const citasFiltradas = citasConEstadosPermitidos
+        .slice() // copia el array
+        .reverse() // invierte el orden: primero las últimas
+        .filter((cita) =>
+            Object.values(cita).some((valor) => String(valor).toLowerCase().includes(busqueda)),
+        );
 
     const indexUltimaCita = paginaActual * citasPorPagina
     const indexPrimeraCita = indexUltimaCita - citasPorPagina
