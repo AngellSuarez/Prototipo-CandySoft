@@ -207,7 +207,7 @@ const Registro = () => {
         break
       case "celular":
         if (formData.celular && !/^\+?\d{0,15}$/.test(formData.celular)) {
-          newErrors.celular = "El celular solo debe contener números y un '+' opcional, máximo 15 caracteres."
+          newErrors.celular = "El celular solo debe contener números y un '+' opcional, máximo 13 caracteres."
         } else if (formData.celular.length > 13) {
           newErrors.celular = "Has alcanzado el máximo de 13 caracteres."
         } else {
