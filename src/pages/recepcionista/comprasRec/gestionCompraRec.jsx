@@ -143,12 +143,14 @@ const GestionComprasRec = () => {
         setPaginaActual(1);
     };
 
-    const comprasFiltrados = compras.filter(compra =>
-        Object.values(compra).some(valor =>
-            String(valor).toLowerCase().includes(busqueda)
-        )
-    );
-
+    const comprasFiltrados = compras
+        .slice() // copia para no mutar el original
+        .reverse() // invierte el orden: primero los últimos
+        .filter(compra =>
+            Object.values(compra).some(valor =>
+                String(valor).toLowerCase().includes(busqueda)
+            )
+        );
     const indexUltimo = paginaActual * comprasPorPagina;
     const indexPrimero = indexUltimo - comprasPorPagina;
     const comprasActuales = comprasFiltrados.slice(indexPrimero, indexUltimo);
@@ -280,7 +282,7 @@ const GestionComprasRec = () => {
     };
 
     const [isCrearModalOpen, setIsCrearModalOpen] = useState(false);
-    const [formCompra, setFormCompra] = useState({ proveedor: '', fecha_ingreso: '', fecha_compra: '' });
+    const [formCompra, setFormCompra] = useState({ proveedor: '', fecha_ingreso: '', fecha_compra: '', numero_factura: '' });
     const [erroresCompra, setErroresCompra] = useState({});
     const [showIngresoDateInput, setShowIngresoDateInput] = useState(false);
     const [showCompraDateInput, setShowCompraDateInput] = useState(false);
@@ -774,6 +776,7 @@ const GestionComprasRec = () => {
                 <table className="roles-table">
                     <thead>
                         <tr>
+                            <th>Número factura</th>
                             <th>Proveedor</th>
                             <th>Fecha Compra</th>
                             <th>Total</th>
@@ -787,6 +790,7 @@ const GestionComprasRec = () => {
                                 const esEditable = compra.estado_nombre === "Pendiente";
                                 return (
                                     <tr key={compra.id}>
+                                        <td>{compra.numeroFactura}</td>
                                         <td>{obtenerNombreProveedor(proveedores.find(p => p.id === compra.proveedor_id))}</td>
                                         <td>{compra.fechaCompra}</td>
                                         <td>${parseFloat(compra.total).toLocaleString()}</td>
@@ -888,6 +892,9 @@ const GestionComprasRec = () => {
                                         if (!formCompra.fecha_compra) {
                                             errores.fecha_compra = "La fecha de compra es obligatoria.";
                                         }
+                                        if (!formCompra.numero_factura) {
+                                            errores.numero_factura = "El número de factura es obligatorio.";
+                                        }
 
                                         if (Object.keys(errores).length > 0) {
                                             setErroresCompra(errores);
@@ -937,7 +944,6 @@ const GestionComprasRec = () => {
                                                 onBlur={handleBlur}
                                             >
                                                 <option value="">Proveedor *</option>
-
                                                 {proveedores
                                                     .filter((p) => p.estado === "Activo")
                                                     .map((p) => {
@@ -945,7 +951,6 @@ const GestionComprasRec = () => {
                                                             p.tipo_persona === "NATURAL"
                                                                 ? `${p.nombre_representante} ${p.apellido_representante}`
                                                                 : p.nombre_empresa;
-
                                                         return (
                                                             <option key={p.id} value={p.id}>
                                                                 {nombre}
@@ -953,7 +958,6 @@ const GestionComprasRec = () => {
                                                         );
                                                     })}
                                             </select>
-
                                             {erroresCompra.proveedor && (
                                                 <p className="error-texto text-red-600 text-left mt-1">{erroresCompra.proveedor}</p>
                                             )}
@@ -1027,8 +1031,24 @@ const GestionComprasRec = () => {
                                             )}
                                         </div>
 
+                                        {/* NUEVO CAMPO NUMERO FACTURA */}
+                                        <div className="w-full campo relative">
+                                            <label className="subtitulo-editar-todos">Número factura:</label>
+                                            <input
+                                                type="text"
+                                                name="numero_factura"
+                                                className="input-texto w-full"
+                                                value={formCompra.numero_factura}
+                                                onChange={handleChange}
+                                                onBlur={handleBlur}
+                                                placeholder="Número de factura *"
+                                                maxLength={30}
+                                            />
+                                            {erroresCompra.numero_factura && (
+                                                <p className="error-texto text-red-600 text-left mt-1">{erroresCompra.numero_factura}</p>
+                                            )}
+                                        </div>
                                     </div>
-
                                     <div className="button-container">
                                         <button type="button" className="btn-cancelar" onClick={closeCrearModal}>Cancelar</button>
                                         <button type="submit" className="btn-crear">Continuar</button>
