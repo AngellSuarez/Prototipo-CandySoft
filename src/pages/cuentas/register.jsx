@@ -60,7 +60,7 @@ const Registro = () => {
   const getNumeroDocumentoError = (value) => {
     const trimmedValue = value.trim()
     if (trimmedValue.length === 0) return "El número de documento es obligatorio."
-    if (trimmedValue.length < 10) return "Debes tener mínimo 10 caracteres."
+    if (trimmedValue.length < 6) return "Debes tener mínimo 6 caracteres."
     if (trimmedValue.length > 15) return "Has alcanzado el máximo de 15 caracteres."
     return null
   }
@@ -208,8 +208,8 @@ const Registro = () => {
       case "celular":
         if (formData.celular && !/^\+?\d{0,15}$/.test(formData.celular)) {
           newErrors.celular = "El celular solo debe contener números y un '+' opcional, máximo 15 caracteres."
-        } else if (formData.celular.length > 15) {
-          newErrors.celular = "Has alcanzado el máximo de 15 caracteres."
+        } else if (formData.celular.length > 13) {
+          newErrors.celular = "Has alcanzado el máximo de 13 caracteres."
         } else {
           delete newErrors.celular
         }
